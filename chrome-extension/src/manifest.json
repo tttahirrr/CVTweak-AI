@@ -1,0 +1,36 @@
+{
+  "manifest_version": 3,
+  "name": "CVTweak-AI",
+  "version": "1.0.0",
+  "description": "AI-powered resume optimization and cover letter generation tool. Analyze your resume against job descriptions and get personalized improvement suggestions.",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://your-backend-domain.com/*",
+    "http://localhost:8000/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ],
+  "author": "Your Name",
+  "homepage_url": "https://github.com/yourusername/CVTweak-AI"
+} 

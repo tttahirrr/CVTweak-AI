@@ -1,0 +1,40 @@
+# Environment variables
+.env
+backend/.env
+
+# Virtual environments
+venv/
+backend/venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+build/
+dist/
+*.zip
+
+# Logs
+*.log
+
+# Node modules (if any)
+node_modules/
+
+# Extension package
+cvtweak-ai-extension.zip 

@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CVTweak-AI - Cyberpunk Brutalist Preview</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-cyan: #00FFFF;
+            --neon-magenta: #FF00FF;
+            --acid-yellow: #CCFF00;
+            --hot-pink: #FF1493;
+            --electric-blue: #0080FF;
+            --deep-charcoal: #1a1a1a;
+            --darker-charcoal: #0d0d0d;
+            --concrete-gray: #2a2a2a;
+            --warning-red: #FF073A;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Exo 2', sans-serif;
+            background: linear-gradient(135deg, var(--deep-charcoal) 0%, var(--darker-charcoal) 100%);
+            color: var(--neon-cyan);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+            animation: powerOn 0.8s ease-out;
+        }
+
+        @keyframes powerOn {
+            0% { 
+                opacity: 0; 
+                transform: scale(0.8);
+                filter: brightness(0);
+            }
+            50% { 
+                opacity: 0.5; 
+                filter: brightness(2);
+            }
+            100% { 
+                opacity: 1; 
+                transform: scale(1);
+                filter: brightness(1);
+            }
+        }
+
+        /* Animated wireframe background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(rgba(0,255,255,0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,255,255,0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+            animation: gridDrift 20s linear infinite;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @keyframes gridDrift {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(30px, 30px); }
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+            max-width: 420px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-family: 'Orbitron', monospace;
+            font-weight: 900;
+            font-size: 28px;
+            text-align: center;
+            margin-bottom: 25px;
+            color: var(--neon-magenta);
+            text-shadow: 0 0 20px var(--neon-magenta);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            position: relative;
+            animation: titleGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes titleGlow {
+            0% { text-shadow: 0 0 20px var(--neon-magenta); }
+            100% { text-shadow: 0 0 30px var(--neon-magenta), 0 0 40px var(--hot-pink); }
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+            animation: underlineGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes underlineGlow {
+            0% { box-shadow: 0 0 5px var(--neon-cyan); }
+            100% { box-shadow: 0 0 15px var(--neon-cyan); }
+        }
+
+        .section {
+            background: rgba(42, 42, 42, 0.8);
+            border: 2px solid var(--neon-cyan);
+            border-radius: 0;
+            margin-bottom: 20px;
+            padding: 15px;
+            position: relative;
+            backdrop-filter: blur(5px);
+            box-shadow: 
+                0 0 20px rgba(0, 255, 255, 0.3),
+                inset 0 0 20px rgba(0, 255, 255, 0.1);
+            transform: skew(-1deg);
+        }
+
+        .section::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-magenta), var(--neon-cyan));
+            z-index: -1;
+            border-radius: 0;
+            animation: borderPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes borderPulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .section-content {
+            transform: skew(1deg);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            color: var(--acid-yellow);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 12px;
+            text-shadow: 0 0 10px var(--acid-yellow);
+        }
+
+        .resume-selector {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        select {
+            flex: 1;
+            padding: 12px;
+            background: var(--darker-charcoal);
+            border: 2px solid var(--electric-blue);
+            color: var(--neon-cyan);
+            font-family: 'Exo 2', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 0;
+            outline: none;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 5px currentColor;
+        }
+
+        select:focus {
+            border-color: var(--neon-magenta);
+            box-shadow: 
+                0 0 20px var(--neon-magenta),
+                inset 0 0 20px rgba(255, 0, 255, 0.2);
+            transform: scale(1.02);
+        }
+
+        select:hover {
+            border-color: var(--hot-pink);
+            background: rgba(255, 20, 147, 0.1);
+        }
+
+        .danger-btn {
+            padding: 8px 16px;
+            background: linear-gradient(45deg, var(--warning-red), #FF4500);
+            border: none;
+            color: white;
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border-radius: 0;
+            box-shadow: 0 0 15px rgba(255, 7, 58, 0.5);
+        }
+
+        .danger-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .danger-btn:hover::before {
+            left: 100%;
+        }
+
+        .danger-btn:hover {
+            background: linear-gradient(45deg, #FF4500, var(--hot-pink));
+            box-shadow: 0 0 25px var(--hot-pink);
+            transform: translateY(-2px);
+        }
+
+        .danger-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 0 10px var(--warning-red);
+        }
+
+        .danger-btn:disabled {
+            background: var(--concrete-gray);
+            box-shadow: none;
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        .upload-section {
+            background: rgba(13, 13, 13, 0.9);
+            border: 2px dashed var(--acid-yellow);
+            padding: 20px;
+            margin-top: 15px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .upload-section::before {
+            content: '⚠ CLASSIFIED DATA UPLOAD ⚠';
+            position: absolute;
+            top: -12px;
+            left: 15px;
+            background: var(--darker-charcoal);
+            color: var(--acid-yellow);
+            padding: 0 10px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .upload-section.active {
+            border-color: var(--neon-magenta);
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.3);
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            background: var(--darker-charcoal);
+            border: 1px solid var(--electric-blue);
+            color: var(--neon-cyan);
+            font-family: 'Exo 2', sans-serif;
+            font-size: 14px;
+            margin-bottom: 15px;
+            border-radius: 0;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--neon-magenta);
+            box-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
+            transform: scale(1.02);
+        }
+
+        input[type="text"]::placeholder {
+            color: rgba(0, 255, 255, 0.5);
+            font-style: italic;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 15px;
+            background: var(--darker-charcoal);
+            border: 2px solid var(--electric-blue);
+            color: var(--neon-cyan);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            resize: vertical;
+            min-height: 120px;
+            border-radius: 0;
+            outline: none;
+            transition: all 0.3s ease;
+            line-height: 1.5;
+        }
+
+        textarea:focus {
+            border-color: var(--neon-magenta);
+            box-shadow: 
+                0 0 20px rgba(255, 0, 255, 0.5),
+                inset 0 0 20px rgba(255, 0, 255, 0.1);
+        }
+
+        textarea::placeholder {
+            color: rgba(0, 255, 255, 0.5);
+            font-style: italic;
+        }
+
+        .file-upload-label {
+            display: inline-block;
+            padding: 12px 20px;
+            background: linear-gradient(45deg, var(--neon-cyan), var(--electric-blue));
+            color: var(--darker-charcoal);
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            border-radius: 0;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: none;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+        }
+
+        .file-upload-label::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .file-upload-label:hover::before {
+            left: 100%;
+        }
+
+        .file-upload-label:hover {
+            background: linear-gradient(45deg, var(--hot-pink), var(--neon-magenta));
+            box-shadow: 0 0 25px var(--hot-pink);
+            transform: translateY(-2px);
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .filename {
+            margin-top: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--acid-yellow);
+            font-style: italic;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .primary-btn, .secondary-btn {
+            flex: 1;
+            padding: 15px 20px;
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border-radius: 0;
+        }
+
+        .primary-btn {
+            background: linear-gradient(45deg, var(--neon-magenta), var(--hot-pink));
+            color: white;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
+        }
+
+        .secondary-btn {
+            background: linear-gradient(45deg, var(--neon-cyan), var(--electric-blue));
+            color: var(--darker-charcoal);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+        }
+
+        .primary-btn::before, .secondary-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .primary-btn:hover::before, .secondary-btn:hover::before {
+            left: 100%;
+        }
+
+        .primary-btn:hover {
+            background: linear-gradient(45deg, var(--hot-pink), var(--acid-yellow));
+            box-shadow: 0 0 30px var(--hot-pink);
+            transform: translateY(-3px);
+        }
+
+        .secondary-btn:hover {
+            background: linear-gradient(45deg, var(--acid-yellow), var(--neon-magenta));
+            box-shadow: 0 0 30px var(--acid-yellow);
+            transform: translateY(-3px);
+        }
+
+        .primary-btn:active, .secondary-btn:active {
+            transform: translateY(0);
+        }
+
+        .primary-btn:disabled, .secondary-btn:disabled {
+            background: var(--concrete-gray);
+            box-shadow: none;
+            cursor: not-allowed;
+            opacity: 0.5;
+            transform: none;
+        }
+
+        .results-panel {
+            background: rgba(13, 13, 13, 0.95);
+            border: 2px solid var(--acid-yellow);
+            padding: 20px;
+            margin-top: 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--neon-cyan);
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            min-height: 80px;
+            position: relative;
+            border-radius: 0;
+            box-shadow: 
+                0 0 20px rgba(204, 255, 0, 0.3),
+                inset 0 0 20px rgba(204, 255, 0, 0.1);
+        }
+
+        .results-panel::before {
+            content: '> ANALYSIS OUTPUT';
+            position: absolute;
+            top: -12px;
+            left: 15px;
+            background: var(--darker-charcoal);
+            color: var(--acid-yellow);
+            padding: 0 10px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .cover-letter-panel {
+            border-color: var(--neon-magenta);
+            box-shadow: 
+                0 0 20px rgba(255, 0, 255, 0.3),
+                inset 0 0 20px rgba(255, 0, 255, 0.1);
+        }
+
+        .cover-letter-panel::before {
+            content: '> COVER LETTER OUTPUT';
+            color: var(--neon-magenta);
+        }
+
+        /* Loading animation */
+        .loading {
+            position: relative;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(0, 255, 255, 0.3);
+            border-top: 3px solid var(--neon-cyan);
+            border-radius: 50%;
+            animation: cyberspin 1s linear infinite;
+        }
+
+        @keyframes cyberspin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        /* Glitch effect for errors */
+        .error {
+            animation: glitch 0.5s ease-in-out infinite;
+            color: var(--warning-red);
+        }
+
+        @keyframes glitch {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-2px); }
+            40% { transform: translateX(2px); }
+            60% { transform: translateX(-1px); }
+            80% { transform: translateX(1px); }
+        }
+
+        /* Demo status indicator */
+        .demo-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(45deg, var(--warning-red), var(--hot-pink));
+            color: white;
+            padding: 10px 15px;
+            font-family: 'Orbitron', monospace;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            z-index: 1000;
+            box-shadow: 0 0 20px rgba(255, 7, 58, 0.5);
+            animation: demoFlash 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes demoFlash {
+            0% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 450px) {
+            .container { padding: 15px; }
+            h1 { font-size: 20px; }
+            .action-buttons { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-indicator">DEMO MODE</div>
+    
+    <div class="container">
+        <h1>CVTweak-AI</h1>
+        
+        <div class="section">
+            <div class="section-content">
+                <label>RESUME VAULT</label>
+                <div class="resume-selector">
+                    <select id="resume-selector">
+                        <option value="">SELECT RESUME...</option>
+                        <option value="1">Data Science Resume [ID:1]</option>
+                        <option value="2">Software Engineer Resume [ID:2]</option>
+                        <option value="upload-new">+ UPLOAD NEW RESUME</option>
+                    </select>
+                    <button class="danger-btn" id="delete-resume-btn">PURGE</button>
+                </div>
+                
+                <div class="upload-section" id="upload-new-section" style="display: none;">
+                    <input type="text" id="resume-name" placeholder="ENTER RESUME CODENAME...">
+                    <label for="resume-file" class="file-upload-label">SELECT FILE</label>
+                    <input type="file" id="resume-file" accept=".pdf">
+                    <div class="filename" id="filename">NO FILE SELECTED</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-content">
+                <label for="job-description">TARGET DESCRIPTION</label>
+                <textarea id="job-description" placeholder="PASTE JOB DESCRIPTION FOR ANALYSIS...">We are seeking a Senior Software Engineer to join our dynamic team. The ideal candidate will have experience with Python, React, and cloud technologies. You will be responsible for developing scalable web applications and working with cross-functional teams to deliver high-quality software solutions.</textarea>
+            </div>
+        </div>
+        
+        <div class="action-buttons">
+            <button class="primary-btn" id="analyze-button">ANALYZE</button>
+            <button class="secondary-btn" id="cover-letter-button">GENERATE</button>
+        </div>
+        
+        <div class="results-panel" id="results">
+            AWAITING ANALYSIS...
+        </div>
+        
+        <div class="results-panel cover-letter-panel" id="cover-letter-results" style="display: none;">
+            AWAITING COVER LETTER GENERATION...
+        </div>
+    </div>
+    
+    <script>
+        // Simplified demo version of the JavaScript
+        
+        // Cyberpunk sound effects
+        class CyberSounds {
+            constructor() {
+                try {
+                    this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                } catch (e) {
+                    console.log('Web Audio not supported');
+                    this.audioContext = null;
+                }
+            }
+
+            playBeep(frequency = 800, duration = 100) {
+                if (!this.audioContext) return;
+                
+                const oscillator = this.audioContext.createOscillator();
+                const gainNode = this.audioContext.createGain();
+                
+                try {
+                    oscillator.connect(gainNode);
+                    gainNode.connect(this.audioContext.destination);
+                    
+                    oscillator.frequency.value = frequency;
+                    oscillator.type = 'square';
+                    
+                    gainNode.gain.setValueAtTime(0.1, this.audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + duration / 1000);
+                    
+                    oscillator.start(this.audioContext.currentTime);
+                    oscillator.stop(this.audioContext.currentTime + duration / 1000);
+                } catch (e) {
+                    console.log('Audio playback failed');
+                }
+            }
+
+            playSuccess() {
+                this.playBeep(600, 150);
+                setTimeout(() => this.playBeep(800, 150), 100);
+                setTimeout(() => this.playBeep(1000, 150), 200);
+            }
+
+            playClick() {
+                this.playBeep(1200, 50);
+            }
+        }
+
+        const sounds = new CyberSounds();
+
+        // Enhanced UI animations
+        class CyberUI {
+            static showThinkingAnimation(element, text = 'PROCESSING...') {
+                element.classList.add('loading');
+                element.textContent = text;
+                
+                let dots = 0;
+                const interval = setInterval(() => {
+                    dots = (dots + 1) % 4;
+                    element.textContent = text + '.'.repeat(dots);
+                }, 500);
+                
+                return interval;
+            }
+
+            static hideThinkingAnimation(element, interval) {
+                element.classList.remove('loading');
+                clearInterval(interval);
+            }
+
+            static typewriterEffect(element, text, speed = 30) {
+                element.textContent = '';
+                let i = 0;
+                
+                const interval = setInterval(() => {
+                    if (i < text.length) {
+                        element.textContent += text.charAt(i);
+                        if (Math.random() > 0.95) sounds.playBeep(1000 + Math.random() * 500, 20);
+                        i++;
+                    } else {
+                        clearInterval(interval);
+                    }
+                }, speed);
+            }
+
+            static pulseButton(button) {
+                button.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    button.style.transform = '';
+                }, 150);
+            }
+        }
+
+        // Demo functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log(`
+            ╔═══════════════════════════════════════╗
+            ║         CVTweak-AI INITIALIZED        ║
+            ║         NEURAL NETWORK ONLINE         ║
+            ║         SYSTEM STATUS: ACTIVE         ║
+            ╚═══════════════════════════════════════╝
+            `);
+
+            const selector = document.getElementById('resume-selector');
+            const uploadSection = document.getElementById('upload-new-section');
+            const fileInput = document.getElementById('resume-file');
+            const filenameDiv = document.getElementById('filename');
+            const analyzeBtn = document.getElementById('analyze-button');
+            const generateBtn = document.getElementById('cover-letter-button');
+            const resultsDiv = document.getElementById('results');
+            const coverLetterDiv = document.getElementById('cover-letter-results');
+
+            // Resume selector functionality
+            selector.addEventListener('change', function() {
+                sounds.playClick();
+                CyberUI.pulseButton(selector);
+                
+                if (this.value === 'upload-new') {
+                    uploadSection.style.display = 'block';
+                    uploadSection.style.opacity = '0';
+                    uploadSection.style.transform = 'translateY(-20px)';
+                    
+                    setTimeout(() => {
+                        uploadSection.style.opacity = '1';
+                        uploadSection.style.transform = 'translateY(0)';
+                    }, 100);
+                } else {
+                    uploadSection.style.opacity = '0';
+                    setTimeout(() => {
+                        uploadSection.style.display = 'none';
+                    }, 300);
+                }
+            });
+
+            // File upload functionality
+            fileInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    sounds.playClick();
+                    filenameDiv.textContent = `SELECTED: ${file.name}`;
+                    filenameDiv.style.color = 'var(--neon-cyan)';
+                    uploadSection.classList.add('active');
+                } else {
+                    filenameDiv.textContent = 'NO FILE SELECTED';
+                    filenameDiv.style.color = 'var(--acid-yellow)';
+                    uploadSection.classList.remove('active');
+                }
+            });
+
+            // Analyze button demo
+            analyzeBtn.addEventListener('click', function() {
+                sounds.playClick();
+                CyberUI.pulseButton(analyzeBtn);
+                
+                analyzeBtn.style.background = 'linear-gradient(45deg, var(--warning-red), var(--hot-pink))';
+                analyzeBtn.textContent = 'ANALYZING...';
+                analyzeBtn.disabled = true;
+                
+                const thinkingInterval = CyberUI.showThinkingAnimation(resultsDiv, 'NEURAL NETWORK PROCESSING');
+                
+                setTimeout(() => {
+                    CyberUI.hideThinkingAnimation(resultsDiv, thinkingInterval);
+                    
+                    const demoAnalysis = `## 🎯 TOP 3 ACTIONABLE IMPROVEMENTS
+
+**1. TECHNICAL SKILLS ALIGNMENT**
+• Add React.js experience to your skills section
+• Highlight Python projects with specific frameworks used
+• Include cloud platform certifications (AWS/Azure/GCP)
+
+**2. IMPACT QUANTIFICATION**
+• "Developed scalable web applications" → "Built 5+ React applications serving 10K+ users"
+• Add metrics to demonstrate cross-functional collaboration
+• Include performance improvements achieved
+
+**3. KEYWORD OPTIMIZATION**
+• Missing: "cross-functional teams", "high-quality software"
+• Add: "agile development", "code review", "CI/CD"
+• Include specific technologies mentioned in job posting
+
+⚡ COMPATIBILITY SCORE: 78/100
+🚀 ESTIMATED ATS PASS RATE: 85%`;
+                    
+                    CyberUI.typewriterEffect(resultsDiv, demoAnalysis);
+                    
+                    generateBtn.disabled = false;
+                    generateBtn.style.opacity = '1';
+                    generateBtn.style.transform = 'scale(1.05)';
+                    setTimeout(() => {
+                        generateBtn.style.transform = 'scale(1)';
+                    }, 200);
+                    
+                    sounds.playSuccess();
+                    
+                    setTimeout(() => {
+                        analyzeBtn.style.background = '';
+                        analyzeBtn.textContent = 'ANALYZE';
+                        analyzeBtn.disabled = false;
+                    }, 2000);
+                }, 3000);
+            });
+
+            // Generate cover letter demo
+            generateBtn.addEventListener('click', function() {
+                sounds.playClick();
+                CyberUI.pulseButton(generateBtn);
+                
+                coverLetterDiv.style.display = 'block';
+                coverLetterDiv.style.opacity = '0';
+                coverLetterDiv.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    coverLetterDiv.style.opacity = '1';
+                    coverLetterDiv.style.transform = 'translateY(0)';
+                }, 100);
+
+                generateBtn.style.background = 'linear-gradient(45deg, var(--neon-cyan), var(--electric-blue))';
+                generateBtn.textContent = 'GENERATING...';
+                generateBtn.disabled = true;
+
+                const thinkingInterval = CyberUI.showThinkingAnimation(coverLetterDiv, 'AI WRITING ASSISTANT ACTIVE');
+                
+                setTimeout(() => {
+                    CyberUI.hideThinkingAnimation(coverLetterDiv, thinkingInterval);
+                    
+                    const demoCoverLetter = `Dear Hiring Manager,
+
+I am writing to express my strong interest in the Senior Software Engineer position at your dynamic company. With extensive experience in Python, React, and cloud technologies, I am excited to contribute to your team's mission of delivering high-quality software solutions.
+
+In my previous role, I successfully developed and deployed 8+ scalable web applications using React and Python, serving over 15,000 active users. My experience working with cross-functional teams has taught me the importance of clear communication and collaborative problem-solving, skills that directly align with your requirements.
+
+Key highlights of my background include:
+• 5+ years developing production-ready Python applications
+• Led React frontend development for enterprise-scale projects
+• Implemented cloud-native solutions on AWS, improving system reliability by 40%
+• Mentored junior developers and contributed to code review processes
+
+I am particularly drawn to your company's focus on innovation and technical excellence. The opportunity to work on challenging problems while collaborating with talented engineers aligns perfectly with my career goals.
+
+Thank you for considering my application. I look forward to discussing how my technical expertise and passion for building robust software solutions can contribute to your team's continued success.
+
+Best regards,
+[Your Name]`;
+                    
+                    CyberUI.typewriterEffect(coverLetterDiv, demoCoverLetter);
+                    sounds.playSuccess();
+                    
+                    setTimeout(() => {
+                        generateBtn.style.background = '';
+                        generateBtn.textContent = 'GENERATE';
+                        generateBtn.disabled = false;
+                    }, 2000);
+                }, 4000);
+            });
+
+            // Add click sounds to all interactive elements
+            document.querySelectorAll('button, select, input[type="file"]').forEach(element => {
+                element.addEventListener('click', () => sounds.playClick());
+            });
+
+            // Add hover sound effects
+            document.querySelectorAll('button').forEach(button => {
+                button.addEventListener('mouseenter', () => {
+                    if (Math.random() > 0.7) sounds.playBeep(1500, 30);
+                });
+            });
+
+            // Startup sound
+            setTimeout(() => sounds.playSuccess(), 500);
+        });
+    </script>
+</body>
+</html> 
