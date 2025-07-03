@@ -1,6 +1,6 @@
 # Privacy Policy for CVTweak-AI
 
-**Last Updated: January 2, 2025**
+**Last Updated: July 2, 2025**
 
 ## Introduction
 
